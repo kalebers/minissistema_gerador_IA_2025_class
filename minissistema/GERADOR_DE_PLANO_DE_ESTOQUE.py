@@ -44,7 +44,6 @@ def main():
         current_state = set(start)
         for i, action in enumerate(plan):
             print(f"\nPasso {i + 1}: {action}")
-            # Remove prefixo "Você deve:" se estiver presente
             clean_action = action.replace("Você deve:", "").strip()
             op = next(op for op in ops if op["action"] == clean_action)
 
