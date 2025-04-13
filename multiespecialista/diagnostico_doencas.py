@@ -10,12 +10,12 @@ class Node:
 
     def print_tree(self, prefix=""):
         if self.is_leaf():
-            print(prefix + "➡️ Diagnóstico: " + self.result)
+            print(prefix + "Diagnóstico: " + self.result)
         else:
-            print(prefix + "🔹 Pergunta: " + self.question)
-            print(prefix + "👉 Se SIM:")
+            print(prefix + "Pergunta: " + self.question)
+            print(prefix + "Se SIM:")
             self.yes.print_tree(prefix + "    ")
-            print(prefix + "👉 Se NÃO:")
+            print(prefix + "Se NÃO:")
             self.no.print_tree(prefix + "    ")
 
     def diagnose(self):
