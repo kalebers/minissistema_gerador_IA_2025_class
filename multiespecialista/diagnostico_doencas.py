@@ -63,7 +63,7 @@ def pet_especialista():
 
 
 def main():
-    print("🌱🐶 Bem-vindo ao Sistema Multiespecialista!")
+    print("Bem-vindo ao Sistema Multiespecialista!")
     print("1. Diagnóstico de plantas")
     print("2. Diagnóstico de pets")
 
@@ -71,19 +71,19 @@ def main():
 
     if escolha == '1':
         especialista = planta_especialista()
-        print("\n🧾 Árvore de decisão do especialista em plantas:")
+        print("\n Árvore de decisão do especialista em plantas:")
         especialista.print_tree()
-        print("\n🔍 Iniciando diagnóstico...\n")
+        print("\n Iniciando diagnóstico...\n")
         resultado = especialista.diagnose()
-        print(f"\n✅ Resultado: {resultado}")
+        print(f"\n Resultado: {resultado}")
 
     elif escolha == '2':
         especialista = pet_especialista()
-        print("\n🧾 Árvore de decisão do especialista em pets:")
+        print("\n Árvore de decisão do especialista em pets:")
         especialista.print_tree()
-        print("\n🔍 Iniciando diagnóstico...\n")
+        print("\n Iniciando diagnóstico...\n")
         resultado = especialista.diagnose()
-        print(f"\n✅ Resultado: {resultado}")
+        print(f"\n Resultado: {resultado}")
 
     else:
         print("Opção inválida.")
