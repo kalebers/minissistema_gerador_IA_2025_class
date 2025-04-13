@@ -11,7 +11,7 @@ graph = {
     "Boston": {}
 }
 
-# Heurística: distância em linha reta (ou estimativa razoável em km)
+# Heurística: distância em linha reta (em km)
 heuristic = {
     "Stuttgart": 6200,
     "Paris": 5900,
