@@ -33,8 +33,12 @@ def a_star_search(start, goal):
     f_score = {city: float("inf") for city in graph}
     f_score[start] = heuristic[start]
 
+    caminho_percorrido = []  # Aqui vamos guardar o percurso
+
     while open_set:
         _, current = heapq.heappop(open_set)
+
+        caminho_percorrido.append(current)  # Adiciona a cidade visitada
 
         if current == goal:
             # Reconstruir o caminho
@@ -43,10 +47,14 @@ def a_star_search(start, goal):
                 current = came_from[current]
                 path.append(current)
             path.reverse()
-            print("Caminho encontrado:")
+
+            print("\nCaminho percorrido até encontrar o objetivo:")
+            for step in caminho_percorrido:
+                print(f"-> {step}", end=" ")
+            print("\n\nCaminho final encontrado:")
             for step in path:
                 print(f"-> {step}", end=" ")
-            print("\nDistância total:", g_score[goal], "km")
+            print("\n\nDistância total:", g_score[goal], "km")
             return path
 
         for neighbor, distance in graph[current].items():
