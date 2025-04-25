@@ -1,4 +1,6 @@
 import heapq
+import networkx as nx
+import matplotlib.pyplot as plt
 
 # Grafo com distâncias reais aproximadas entre cidades conectadas (em km)
 graph = {
@@ -22,26 +24,59 @@ heuristic = {
     "Boston": 0
 }
 
+# Posições manuais no plano para cada cidade (para melhor visualização)
+city_positions = {
+    "Stuttgart": (1, 3),
+    "Paris": (0, 2),
+    "Berlin": (2, 4),
+    "London": (0, 3),
+    "Reykjavik": (-1, 5),
+    "New York": (-3, 2),
+    "Boston": (-4, 1)
+}
+
+def draw_graph(graph, path=None):
+    G = nx.DiGraph()
+
+    for city, neighbors in graph.items():
+        for neighbor, distance in neighbors.items():
+            G.add_edge(city, neighbor, weight=distance)
+
+    pos = city_positions  # Usar posições personalizadas
+
+    # Desenha o grafo
+    nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=2000, font_size=10, arrows=True)
+
+    if path:
+        path_edges = list(zip(path, path[1:]))
+        nx.draw_networkx_edges(G, pos, edgelist=path_edges, edge_color='red', width=3)
+        nx.draw_networkx_nodes(G, pos, nodelist=path, node_color='red')
+
+    labels = nx.get_edge_attributes(G, 'weight')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_size=8)
+
+    plt.title("Grafo de cidades com melhor caminho (A*)")
+    plt.axis("off")
+    plt.show()
+
 def a_star_search(start, goal):
     open_set = []
-    heapq.heappush(open_set, (0, start))  # (f_score, city)
+    heapq.heappush(open_set, (0, start))
 
-    came_from = {}  # Para reconstruir o caminho
+    came_from = {}
     g_score = {city: float("inf") for city in graph}
     g_score[start] = 0
 
     f_score = {city: float("inf") for city in graph}
     f_score[start] = heuristic[start]
 
-    caminho_percorrido = []  # Aqui vamos guardar o percurso
+    caminho_percorrido = []
 
     while open_set:
         _, current = heapq.heappop(open_set)
-
-        caminho_percorrido.append(current)  # Adiciona a cidade visitada
+        caminho_percorrido.append(current)
 
         if current == goal:
-            # Reconstruir o caminho
             path = [current]
             while current in came_from:
                 current = came_from[current]
@@ -59,7 +94,6 @@ def a_star_search(start, goal):
 
         for neighbor, distance in graph[current].items():
             tentative_g_score = g_score[current] + distance
-
             if tentative_g_score < g_score[neighbor]:
                 came_from[neighbor] = current
                 g_score[neighbor] = tentative_g_score
@@ -69,5 +103,12 @@ def a_star_search(start, goal):
     print("Caminho não encontrado.")
     return None
 
+# Mostra o grafo original
+draw_graph(graph)
+
 # Executa a busca
-a_star_search("Stuttgart", "Boston")
+path = a_star_search("Stuttgart", "Boston")
+
+# Mostra o grafo com o caminho encontrado
+if path:
+    draw_graph(graph, path)
