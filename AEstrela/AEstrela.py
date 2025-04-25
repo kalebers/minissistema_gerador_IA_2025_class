@@ -1,6 +1,7 @@
 import heapq
 import networkx as nx
 import matplotlib.pyplot as plt
+import math
 
 # Grafo com distâncias reais aproximadas entre cidades conectadas (em km)
 graph = {
@@ -13,18 +14,18 @@ graph = {
     "Boston": {}
 }
 
-# Heurística: distância em linha reta (em km)
-heuristic = {
-    "Stuttgart": 6200,
-    "Paris": 5900,
-    "Berlin": 6100,
-    "London": 5600,
-    "Reykjavik": 3900,
-    "New York": 300,
-    "Boston": 0
+# Coordenadas aproximadas (latitude, longitude) de cada cidade
+coordinates = {
+    "Stuttgart": (48.78, 9.18),
+    "Paris": (48.85, 2.35),
+    "Berlin": (52.52, 13.40),
+    "London": (51.50, -0.12),
+    "Reykjavik": (64.13, -21.90),
+    "New York": (40.71, -74.01),
+    "Boston": (42.36, -71.05)
 }
 
-# Posições manuais no plano para cada cidade (para melhor visualização)
+# Posições no plano para visualização
 city_positions = {
     "Stuttgart": (1, 3),
     "Paris": (0, 2),
@@ -35,16 +36,27 @@ city_positions = {
     "Boston": (-4, 1)
 }
 
+def straight_line_distance(coord1, coord2):
+    # Distância euclidiana entre pontos no globo, multiplicada por 111 km 
+    # (aproximação da distância entre dois graus de latitude).
+    lat1, lon1 = coord1
+    lat2, lon2 = coord2
+    return math.sqrt((lat2 - lat1)**2 + (lon2 - lon1)**2) * 111
+
+def build_heuristic(goal):
+    heuristic = {}
+    for city in coordinates:
+        heuristic[city] = straight_line_distance(coordinates[city], coordinates[goal])
+    return heuristic
+
 def draw_graph(graph, path=None):
     G = nx.DiGraph()
-
     for city, neighbors in graph.items():
         for neighbor, distance in neighbors.items():
             G.add_edge(city, neighbor, weight=distance)
 
-    pos = city_positions  # Usar posições personalizadas
+    pos = city_positions  # posições fixas para visualização
 
-    # Desenha o grafo
     nx.draw(G, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=2000, font_size=10, arrows=True)
 
     if path:
@@ -60,6 +72,8 @@ def draw_graph(graph, path=None):
     plt.show()
 
 def a_star_search(start, goal):
+    heuristic = build_heuristic(goal)
+
     open_set = []
     heapq.heappush(open_set, (0, start))
 
@@ -103,12 +117,11 @@ def a_star_search(start, goal):
     print("Caminho não encontrado.")
     return None
 
-# Mostra o grafo original
+
+inicio = "Stuttgart"
+fim = "Boston"
+
 draw_graph(graph)
-
-# Executa a busca
-path = a_star_search("Stuttgart", "Boston")
-
-# Mostra o grafo com o caminho encontrado
+path = a_star_search(inicio, fim)
 if path:
     draw_graph(graph, path)
