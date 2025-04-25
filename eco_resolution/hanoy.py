@@ -67,20 +67,23 @@ uml = Digraph(comment="Decisões ECO-RESOLUTION")
 T1, T2, T3 = [], [], []
 torres = [T1, T2, T3]
 
-# Criação dos discos
-d1 = Disco(1, T3, "D1")
-d2 = Disco(2, T3, "D2")
-d3 = Disco(3, T3, "D3")
+# Escolha do número de discos
+num_discos = int(input("Digite o número de discos: "))
 
-# Adicionando todos na torre inicial
-T1.extend([d3, d2, d1])  # ordem: menor no topo
+# Criação dos discos dinamicamente
+discos = []
+for i in range(num_discos, 0, -1):
+    disco = Disco(i, T3, f"D{i}")
+    discos.append(disco)
+
+# Adicionando todos na torre inicial (T1)
+T1.extend(discos[::-1])  # menor no topo
+discos = discos[::-1]
 for d in T1:
     d.torre_atual = T1
 
-discos = [d1, d2, d3]
-
 # Loop da simulação
-for i in range(20):
+for i in range(50): # Limite de iterações
     print(f"\n--- Iteração {i+1} ---")
     for disco in discos:
         if not disco.satisfeito:
@@ -92,4 +95,4 @@ for i in range(20):
 
 # Salvar o gráfico UML
 uml.render('uml_eco_resolution_hanoi', format='png', cleanup=True)
-print("\n Diagrama UML salvo como 'uml_eco_resolution_hanoi.png'")
+print("\nDiagrama UML salvo como 'uml_eco_resolution_hanoi.png'")

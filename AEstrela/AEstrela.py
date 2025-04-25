@@ -37,8 +37,7 @@ city_positions = {
 }
 
 def straight_line_distance(coord1, coord2):
-    # Distância euclidiana entre pontos no globo, multiplicada por 111 km 
-    # (aproximação da distância entre dois graus de latitude).
+    # Distância euclidiana entre pontos no globo, multiplicada por 111 km (1 grau de latitude = 111 km)
     lat1, lon1 = coord1
     lat2, lon2 = coord2
     return math.sqrt((lat2 - lat1)**2 + (lon2 - lon1)**2) * 111
